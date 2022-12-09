@@ -6,5 +6,11 @@
 
 import pyfiglet
 
-sum7 = pyfiglet.figlet_format("Sum7", font = "bubble")
+sum7 = pyfiglet.figlet_format("Welcome to Sum7", font = "bubble")
 print(sum7)
+print("Rules of the game:")
+print("Players must add the same colored numbers in a row to win.")
+print("Players share one board.")
+print("Numbers go from 1 to 3.")
+print("Only one number is played at a time.")
+print("The game ends when a player sums 7 of the same color-in-a-row")
