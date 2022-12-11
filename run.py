@@ -26,6 +26,96 @@ board = [["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",],
 rows = 7
 cols = 7
 
+player1 = {
+    	"name": "",
+        "chips": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3]
+}
+
+player2 = {
+    	"name": "",
+        "chips": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3]
+}
+
+
+player_turn = 1
+
+def ask_name():
+    """
+    """
+    player1["name"] = input("Please enter player 1 name: ")
+    print("Welcome " +  player1["name"])
+    player2["name"] = input("Please enter player 2 name: ")
+    print("Welcome " +  player2["name"])
+
+ask_name()
+
+def isSpaceAvailable(column, row):
+    print("checkin if column " + column + " row " + row + " is available" )
+    if(board[column][row] == '1'):
+        return False
+    elif(board[column][row]== '2'):
+        return False
+    elif(board[column][row]== '3'):
+        return False  
+    else:
+        return True
+
+
+def coordinateParser(inputString):
+  coordinate = None
+  if(inputString == "A"):
+    coordinate = 0
+  elif(inputString == "B"):
+    coordinate = 1
+  elif(inputString == "C"):
+    coordinate = 2
+  elif(inputString == "D"):
+    coordinate = 3
+  elif(inputString == "E"):
+    coordinate = 4
+  elif(inputString == "F"):
+    coordinate = 5
+  elif(inputString == "G"):
+    coordinate = 6
+  else:
+    print("Invalid")
+  return coordinate
+
+
+def check_gravity(column):
+    selected_column = coordinateParser(column)
+    for y in range(rows, 0, -1):
+        print("selected columns is: " + selected_column + " y is: " + y)
+
+        available = isSpaceAvailable(selected_column, y)
+        print(available)
+
+
+
+def select_play():
+    current_player = None
+    selected_column = None
+
+    if player_turn == 1:
+        current_player = player1
+    else:
+       current_player = player2
+
+    selected_column = input(current_player["name"] + "select a column from A to G")
+    check_gravity(selected_column)
+
+select_play()
+
+   
+
+def decide_turn():
+    if player_turn == 1:
+        player_turn = 2
+    else:
+        player_turn = 1
+     
+
+
 
 def board_game():
     """
@@ -47,3 +137,7 @@ def board_game():
 
 
 print(board_game())
+
+
+
+
