@@ -9,9 +9,10 @@ from colour import Color
 yellow = Color("yellow")
 print(yellow)
 
-sum7 = pyfiglet.figlet_format("Welcome to Sum7", font = "bubble")
+sum7 = pyfiglet.figlet_format("Welcome to Sum7", font="bubble")
 print(sum7)
 print("Rules of the game:")
+print("-------------------------------------------------------------")
 print("Players must add the same colored numbers in a row to win.")
 print("Players share one board.")
 print("Numbers go from 1 to 3.")
@@ -20,91 +21,129 @@ print("The game ends when a player sums 7 of the same color-in-a-row")
 print("-------------------------------------------------------------")
 
 letter_choice = ["A", "B", "C", "D", "E", "F", "G"]
-board = [["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",], 
-["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",], 
-["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",], 
-["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",]]
-rows = 7
-cols = 7
+board = [["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",],
+         ["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",],
+         ["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",],
+         ["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",]]
+ROWS = 7
+COLS = 7
 
 player1 = {
-    	"name": "",
-        "chips": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-         2, 2, 3, 3, 3, 3]
+    "name": "",
+    "chips": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+              2, 2, 3, 3, 3, 3]
 }
 
 player2 = {
-    	"name": "",
-        "chips": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2,
-         2, 2, 2, 3, 3, 3, 3]
+    "name": "",
+    "chips": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2,
+              2, 2, 2, 3, 3, 3, 3]
 }
 
 
 player_turn = 1
+
 
 def board_game():
     """
     Creates the board game with letter and number values for the player
     to choose the input its chip on its turn
     """
-    print("\n     A    B    C    D    E    F    G  ", end = "")
-    for x in range(rows):
+    print("\n     A    B    C    D    E    F    G  ", end="")
+    for x in range(ROWS):
         print("\n   +----+----+----+----+----+----+----+")
-        print(x, " |", end ="")
-        for y in range(cols):
-            if (board[x][y] == "Yellow"):
+        print(x, " |", end="")
+        for y in range(COLS):
+            if board[x][y] == "Yellow":
                 print("", board[x][y], end="  |")
-            elif (board[x][y] == "Green"):
+            elif board[x][y] == "Green":
                 print("", board[x][y], end="  |")
             else:
                 print(" ", board[x][y], end="  |")
     print("\n   +----+----+----+----+----+----+----+")
 
+board_game()
 
 def ask_name():
     """
+    Ask player name to add value to the dictionary
+    and welcome player to th game
     """
-    player1["name"] = input("Please enter your name player 1: ")
+    player1["name"] = input("Please enter your name player 1: \n")
     print("Welcome " + player1["name"])
-    player2["name"] = input("Please enter your name player 2: ")
+    print("---------------------------------------------------\n")
+    player2["name"] = input("Please enter your name player 2: \n")
     print("Welcome " + player2["name"])
+    print("---------------------------------------------------\n")
+
 
 ask_name()
 
 
-def isSpaceAvailable(column, row):
-    print("checkin if column ", column, " row ", row, " is available")
-    if (board[column][row] == '1'):
-        return False
-    elif (board[column][row] == '2'):
-        return False
-    elif (board[column][row] == '3'):
-        return False  
-    else:
-        return True
-
-
-def coordinateParser(inputString):
-    print("inputString" + inputString)
+def coordinate_parser(input_string):
+    """
+    Checking the value of the column selected by the player
+    to get the coordinate space to locate the chip
+    """
+    print("input_string" + input_string)
     coordinate = 0
-    if(inputString == "A"):
+    if input_string == "A":
         coordinate = 0
-    elif(inputString == "B"):
+    elif input_string == "B":
         coordinate = 1
-    elif(inputString == "C"):
+    elif input_string == "C":
         coordinate = 2
-    elif(inputString == "D"):
+    elif input_string == "D":
         coordinate = 3
-    elif(inputString == "E"):
+    elif input_string == "E":
         coordinate = 4
-    elif(inputString == "F"):
+    elif input_string == "F":
         coordinate = 5
-    elif(inputString == "G"):
+    elif input_string == "G":
         coordinate = 6
     else:
         print("Invalid")
     print(coordinate)
     return coordinate
+
+# def checkIfCharacter(letter_choice):
+    # """
+    # Checking the value of the column selected by the player
+    # to get the coordinate space to locate the chip
+    # """
+    # while True
+    # try:
+    # if choice in letter_choice:
+    # pass
+
+
+def is_space_available(column, row):
+    """
+    Checkin if there is space available in the board
+    """
+    print("checkin if column ", column, " row ", row, " is available")
+    if board[column][row] == '1':
+        return False
+    elif board[column][row] == '2':
+        return False
+    elif board[column][row] == '3':
+        return False
+    else:
+        return True
+
+def check_gravity(column, chip):
+    selected_column = coordinate_parser(column)
+    print("selected_column", selected_column)
+    for y in range(6, 0, -1):
+        print("selected columns is: ", selected_column,  " y is: ", y)
+        available = is_space_available(selected_column, y)
+        #print(available, "available")
+        if available:
+            board[y][selected_column] = chip
+            break
+    board_game()
+    #decide_turn()
+    #select_play()
 
 def select_play():
     current_player = None
@@ -114,42 +153,48 @@ def select_play():
         current_player = player1
     else:
         current_player = player2
-    
-    selected_chip_input = input(" Select a chip number from 1 to 3:   ")
+
+    selected_chip_input = input(
+        current_player["name"] + " select a chip number from 1 to 3:   ")
     selected_chip = int(selected_chip_input)
 
-    selected_column_input  = input(" Select a column from A to G:   ")
+    #validate_play(selected_chip)
+
+    selected_column_input = input(
+        current_player["name"] + " select a column from A to G:   ")
     selected_column = str(selected_column_input)
     print(selected_column)
-    check_gravity(selected_column, selected_chip)
+    #check_gravity(selected_column, selected_chip)
 
 
-select_play()
+#select_play()
+
+
+
+# def validate_play(chip):
+    # """
+    # Checks for valid input from the user
+    # """
+#chip = selected_chip
+    # try:
+    #  if chip > 3:
+    #  raise ValueError(
+    #      f"Only number from 1 to 3 are valid, you entered {chip}"
+    #      )
+    # except ValueError as e:
+    #    print( f"Invalid data: {e}, please try again. \n")
+
+
 
 
 def decide_turn():
+    """
+    Checking which player has a turn
+    """
     if player_turn == 1:
         player_turn = 2
     else:
         player_turn = 1
 
 
-def check_gravity(column, chip):
-    selected_column = coordinateParser(column)
-    print("selected_column", selected_column)
-    for y in range(6, 0, -1):
-        print("selected columns is: ", selected_column,  " y is: ", y)
-        available = isSpaceAvailable(selected_column, y)
-        #print(available, "available")
-        if (available == True):
-            board[y][selected_column] = chip
-            break
-    board_game()
-    decide_turn()
-    select_play()
-
-
-
-
-#print(board_game())
-
+# print(board_game())
