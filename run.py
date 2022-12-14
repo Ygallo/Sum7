@@ -4,44 +4,9 @@
 #import pyinputplus as pyip
 
 import pyfiglet
-from colour import Color
-
-yellow = Color("yellow")
-print(yellow)
-
-sum7 = pyfiglet.figlet_format("Welcome to Sum7", font="bubble")
-print(sum7)
-print("Rules of the game:")
-print("-------------------------------------------------------------")
-print("Players must add the same colored numbers in a row to win.")
-print("Players share one board.")
-print("Numbers go from 1 to 3.")
-print("Only one number is played at a time.")
-print("The game ends when a player sums 7 of the same color-in-a-row")
-print("-------------------------------------------------------------")
-
-letter_choice = ["A", "B", "C", "D", "E", "F", "G"]
-board = [["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",],
-         ["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",],
-         ["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",],
-         ["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",]]
-ROWS = 7
-COLS = 7
-
-player1 = {
-    "name": "",
-    "chips": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-              2, 2, 3, 3, 3, 3]
-}
-
-player2 = {
-    "name": "",
-    "chips": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2,
-              2, 2, 2, 3, 3, 3, 3]
-}
+from colorama import Fore, Back, Style
 
 
-player_turn = 1
 
 
 def board_game():
@@ -62,7 +27,6 @@ def board_game():
                 print(" ", board[x][y], end="  |")
     print("\n   +----+----+----+----+----+----+----+")
 
-board_game()
 
 def ask_name():
     """
@@ -75,9 +39,6 @@ def ask_name():
     player2["name"] = input("Please enter your name player 2: \n")
     print("Welcome " + player2["name"])
     print("---------------------------------------------------\n")
-
-
-ask_name()
 
 
 def coordinate_parser(input_string):
@@ -131,6 +92,7 @@ def is_space_available(column, row):
     else:
         return True
 
+
 def check_gravity(column, chip):
     selected_column = coordinate_parser(column)
     print("selected_column", selected_column)
@@ -142,8 +104,9 @@ def check_gravity(column, chip):
             board[y][selected_column] = chip
             break
     board_game()
-    #decide_turn()
-    #select_play()
+    # decide_turn()
+    # select_play()
+
 
 def select_play():
     current_player = None
@@ -158,7 +121,7 @@ def select_play():
         current_player["name"] + " select a chip number from 1 to 3:   ")
     selected_chip = int(selected_chip_input)
 
-    #validate_play(selected_chip)
+    # validate_play(selected_chip)
 
     selected_column_input = input(
         current_player["name"] + " select a column from A to G:   ")
@@ -167,24 +130,23 @@ def select_play():
     #check_gravity(selected_column, selected_chip)
 
 
-#select_play()
+# select_play()
 
 
-
-# def validate_play(chip):
-    # """
-    # Checks for valid input from the user
-    # """
-#chip = selected_chip
-    # try:
-    #  if chip > 3:
-    #  raise ValueError(
-    #      f"Only number from 1 to 3 are valid, you entered {chip}"
-    #      )
-    # except ValueError as e:
-    #    print( f"Invalid data: {e}, please try again. \n")
-
-
+def validate_play(chip):
+    """
+    Checks for valid input from the user
+    """
+    try:
+        chip = int(chip)
+        if chip > 3:
+            raise ValueError(
+            f"Only number from 1 to 3 are valid, you entered {chip}"
+             )
+        return True
+    except ValueError as e:
+        print( f"Invalid data: {e}, please try again. \n")
+        return False 
 
 
 def decide_turn():
@@ -196,5 +158,49 @@ def decide_turn():
     else:
         player_turn = 1
 
+def print_red(text):
+    print(Fore.RED + text + Style.RESET_ALL) 
 
-# print(board_game())
+
+
+if __name__ == "__main__":   
+    print(validate_play("1"))
+    print_red("Player 1 Ben")
+    # print(board_game())
+    sum7 = pyfiglet.figlet_format("Welcome to Sum7", font="bubble")
+    print(sum7)
+    print("Rules of the game:")
+    print("-------------------------------------------------------------")
+    print("Players must add the same colored numbers in a row to win.")
+    print("Players share one board.")
+    print("Numbers go from 1 to 3.")
+    print("Only one number is played at a time.")
+    print("The game ends when a player sums 7 of the same color-in-a-row")
+    print("-------------------------------------------------------------")
+
+    letter_choice = ["A", "B", "C", "D", "E", "F", "G"]
+    board = [["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",],
+             ["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",],
+             ["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",],
+             ["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",]]
+    ROWS = 7
+    COLS = 7
+
+
+    player1 = {
+        "name": "",
+        "chips": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+                  2, 2, 3, 3, 3, 3]
+    }
+
+    player2 = {
+        "name": "",
+        "chips": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2,
+                  2, 2, 2, 3, 3, 3, 3]
+    }
+
+    player_turn = 1
+
+    board_game()
+    ask_name()
+
