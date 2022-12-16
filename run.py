@@ -20,18 +20,18 @@ def board_game():
     Creates the board game with letter and number values for the player
     to choose the input its chip on its turn
     """
-    print("\n     A    B    C    D    E    F    G  ", end="")
+    print("\n      A     B     C     D     E     F     G  ", end="")
     for x in range(ROWS):
-        print("\n   +----+----+----+----+----+----+----+")
+        print("\n   +-----+-----+-----+-----+-----+-----+-----+")
         print(x, " |", end="")
         for y in range(COLS):
             if board[x][y] == "Yellow":
-                print("", board[x][y], end="  |")
+                print("", board[x][y], end="   |")
             elif board[x][y] == "Green":
-                print("", board[x][y], end="  |")
+                print("", board[x][y], end="   |")
             else:
-                print(" ", board[x][y], end="  |")
-    print("\n   +----+----+----+----+----+----+----+")
+                print(" ", board[x][y], end="   |")
+    print("\n   +-----+-----+-----+-----+-----+-----+-----+")
 
 
 def ask_name():
@@ -45,9 +45,6 @@ def ask_name():
     player2["name"] = input("Please enter your name player 2: \n")
     print("Welcome " + Fore.GREEN + player2["name"] + Style.RESET_ALL)
     print("---------------------------------------------------\n")
-
-
-a
 
 
 def coordinate_parser(input_string):
@@ -111,27 +108,27 @@ def select_play():
     current_player = None
     selected_column = None
 
-    #player_turn = None
+    player_turn = None
 
-    # if player_turn == 1:
-    #current_player = player1
-    # else:
-    #current_player = player2
+    if player_turn == 1:
+        current_player = player1
+    else:
+        current_player = player2
 
     selected_chip_input = input(
         current_player["name"] + " select a chip number from 1 to 3:   ")
     selected_chip = int(selected_chip_input)
 
-    validate_number(chip)
+    validate_number(selected_chip)
 
     selected_column_input = input(
         current_player["name"] + " select a column from A to G:   ").upper()
     selected_column = str(selected_column_input)
     print(selected_column)
-    #check_gravity(selected_column, selected_chip)
+    check_gravity(selected_column, selected_chip)
 
 
-# select_play()
+#select_play()
 
 
 def validate_number(chip):
@@ -147,7 +144,7 @@ def validate_number(chip):
         return True
     except ValueError as e:
         print(f"Invalid data: {e}, please try again. \n")
-        return False
+        select_play()
 
 
 def validate_letter(i):
@@ -171,6 +168,7 @@ def decide_turn():
     """
     Checking which player has a turn
     """
+    player_turn = 1
     if player_turn == 1:
         player_turn = 2
     else:
@@ -196,8 +194,6 @@ if __name__ == "__main__":
     # print(validate_letter("M"))
     # select_play()
     print_yellow("Player 1 Ben")
-    print_green("Player 1 Ben")
-    print(board_game())
     sum7 = pyfiglet.figlet_format("Welcome to Sum7", font="bubble")
     print(sum7)
     print("Rules of the game:")
@@ -233,4 +229,5 @@ if __name__ == "__main__":
 
     board_game()
     ask_name()
+    select_play()
     decide_turn()
