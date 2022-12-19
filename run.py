@@ -14,6 +14,8 @@ board = [["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",],
          ["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",],
          ["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",]]
 
+turn = 1
+
 
 def board_game():
     """
@@ -79,11 +81,12 @@ def is_space_available(column, row):
     Checkin if there is space available in the board
     """
     print("checkin if column ", column, " row ", row, " is available")
-    if board[column][row] == '1':
+    print("current value of the position", board[column][row])
+    if board[column][row] == 1:
         return False
-    elif board[column][row] == '2':
+    elif board[column][row] == 2:
         return False
-    elif board[column][row] == '3':
+    elif board[column][row] == 3:
         return False
     else:
         return True
@@ -94,23 +97,22 @@ def check_gravity(column, chip):
     print("selected_column", selected_column)
     for y in range(6, 0, -1):
         print("selected columns is: ", selected_column,  " y is: ", y)
-        available = is_space_available(selected_column, y)
-        #print(available, "available")
+        available = is_space_available(y, selected_column)
+        print(available, "available")
         if available:
             board[y][selected_column] = chip
             break
     board_game()
-    # decide_turn()
-    # select_play()
+    decide_turn()
+    select_play()
 
 
 def select_play():
     current_player = None
     selected_column = None
 
-    player_turn = None
 
-    if player_turn == 1:
+    if player1["turn"]  == True:
         current_player = player1
     else:
         current_player = player2
@@ -139,7 +141,7 @@ def validate_number(chip):
         chip = int(chip)
         if chip > 3:
             raise ValueError(
-                f"Only number from 1 to 3 are valid, you entered {chip}"
+                f"You entered {chip}"
             )
         return True
     except ValueError as e:
@@ -168,11 +170,13 @@ def decide_turn():
     """
     Checking which player has a turn
     """
-    player_turn = 1
-    if player_turn == 1:
-        player_turn = 2
+    print(player1["turn"], "payer turn")
+    if player1["turn"] == True:
+        player1["turn"] = False
+        player2["turn"] = True
     else:
-        player_turn = 1
+        player2["turn"] = False
+        player1["turn"] = True
 
 
 def print_yellow(text):
@@ -192,7 +196,7 @@ def print_green(text):
 if __name__ == "__main__":
 
     # print(validate_letter("M"))
-    # select_play()
+    #select_play()
     print_yellow("Player 1 Ben")
     sum7 = pyfiglet.figlet_format("Welcome to Sum7", font="bubble")
     print(sum7)
@@ -216,18 +220,20 @@ if __name__ == "__main__":
     player1 = {
         "name": "",
         "chips": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-                  2, 2, 3, 3, 3, 3]
+                  2, 2, 3, 3, 3, 3],
+        "turn": False
     }
 
     player2 = {
         "name": "",
         "chips": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2,
-                  2, 2, 2, 3, 3, 3, 3]
+                  2, 2, 2, 3, 3, 3, 3],
+        "turn": False
     }
 
-    player_turn = 1
+    #turn = 1
 
     board_game()
     ask_name()
     select_play()
-    decide_turn()
+   #decide_turn()
