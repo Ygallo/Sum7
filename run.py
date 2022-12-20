@@ -15,6 +15,13 @@ board = [["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",],
          ["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",],
          ["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",]]
 
+chipOwner = [["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",],
+         ["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",],
+         ["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",],
+         ["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",]]
+
+
+
 turn = 1
 
 
@@ -28,15 +35,15 @@ def board_game():
         print("\n   +-----+-----+-----+-----+-----+-----+-----+")
         print(x, " |", end="")
         for y in range(COLS):
-            if board[x][y] == "Yellow":
-                print("", board[x][y], end="   |")
-            elif board[x][y] == "Green":
-                print("", board[x][y], end="   |")
+            if chipOwner[x][y] == "player1":
+                print("", Fore.YELLOW + str(board[x][y]) + Style.RESET_ALL, end="   |")
+            elif chipOwner[x][y] == "player2":
+                print("", Fore.GREEN + str(board[x][y]) + Style.RESET_ALL, end="   |")
             else:
-                #print(" ",  board[x][y], end="   |")
-                print(" ", end="")
-                print_yellow(board[x][y])
-                print(end="   |")
+                print(" ",  board[x][y], end="   |")
+                #print(" ", end="")
+                #print_yellow(board[x][y])
+                #print(end="   |")
                 
     print("\n   +-----+-----+-----+-----+-----+-----+-----+")
 
@@ -101,12 +108,15 @@ def is_space_available(column, row):
 def check_gravity(column, chip):
     selected_column = coordinate_parser(column)
     print("selected_column", selected_column)
+    current_turn=check_turn()
+
     for y in range(6, 0, -1):
         print("selected columns is: ", selected_column,  " y is: ", y)
         available = is_space_available(y, selected_column)
         print(available, "available")
         if available:
             board[y][selected_column] = chip
+            chipOwner[y][selected_column]=current_turn
             break
     board_game()
     decide_turn()
@@ -171,6 +181,14 @@ def validate_number(chip):
         #print(f"Invalid data: {e}, please try again. \n")
         #return False
 
+def check_turn():
+    """
+    return who is playing
+    """
+    if player1["turn"]:
+        return "player1"
+    else:
+        return "player2"
 
 def decide_turn():
     """
