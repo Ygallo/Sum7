@@ -5,6 +5,7 @@
 
 import pyfiglet
 from colorama import Fore, Back, Style
+import pyinputplus as pyip
 
 ROWS = 7
 COLS = 7
@@ -32,7 +33,11 @@ def board_game():
             elif board[x][y] == "Green":
                 print("", board[x][y], end="   |")
             else:
-                print(" ", board[x][y], end="   |")
+                #print(" ",  board[x][y], end="   |")
+                print(" ", end="")
+                print_yellow(board[x][y])
+                print(end="   |")
+                
     print("\n   +-----+-----+-----+-----+-----+-----+-----+")
 
 
@@ -41,10 +46,11 @@ def ask_name():
     Ask player name to add value to the dictionary
     and welcome player to th game
     """
-    player1["name"] = input("Please enter your name player 1: \n")
+    #player1["name"] = input("Please enter your name player 1: \n")
+    player1["name"]= pyip.inputStr("Please enter your name player 1: \n")
     print("Welcome " + Fore.YELLOW + player1["name"] + Style.RESET_ALL)
     print("---------------------------------------------------\n")
-    player2["name"] = input("Please enter your name player 2: \n")
+    player2["name"] = pyip.inputStr("Please enter your name player 2: \n")
     print("Welcome " + Fore.GREEN + player2["name"] + Style.RESET_ALL)
     print("---------------------------------------------------\n")
 
@@ -112,7 +118,7 @@ def select_play():
     selected_column = None
 
 
-    if player1["turn"]  == True:
+    if player1["turn"]:
         current_player = player1
     else:
         current_player = player2
@@ -123,8 +129,8 @@ def select_play():
 
     validate_number(selected_chip)
 
-    selected_column_input = input(
-        current_player["name"] + " select a column from A to G:   ").upper()
+    selected_column_input = pyip.inputMenu(["A", "B", "C", "D", "E", "F", "G"], prompt =
+        current_player["name"] + " select a column from A to G:   \n")
     selected_column = str(selected_column_input)
     print(selected_column)
     check_gravity(selected_column, selected_chip)
@@ -149,21 +155,21 @@ def validate_number(chip):
         select_play()
 
 
-def validate_letter(i):
-    """
-    Checking the value of the column selected by the player
-    """
-    try:
-        letter_choice = ["A", "B", "C", "D", "E", "F", "G"]
-        i = input("letter row: ")
-        if i not in letter_choice:
-            raise ValueError(
-                f"You can only select A, B, C, D, E, F, G, you entered {i}"
-            )
-        print(i)
-    except ValueError as e:
-        print(f"Invalid data: {e}, please try again. \n")
-        return False
+#def validate_letter(i):
+   # """
+    #Checking the value of the column selected by the player
+    #"""
+    #try:
+        #letter_choice = ["A", "B", "C", "D", "E", "F", "G"]
+        #i = input("letter row: ")
+        #if i not in letter_choice:
+            #raise ValueError(
+                #f"You can only select A, B, C, D, E, F, G, you entered {i}"
+            #)
+        #print(i)
+    #except ValueError as e:
+        #print(f"Invalid data: {e}, please try again. \n")
+        #return False
 
 
 def decide_turn():
@@ -183,7 +189,8 @@ def print_yellow(text):
     """
     Change the color to yellow for player 1 input on the board
     """
-    print(Fore.YELLOW + text + Style.RESET_ALL)
+    print(Fore.YELLOW + text + Style.RESET_ALL, end="")
+
 
 
 def print_green(text):
@@ -195,7 +202,7 @@ def print_green(text):
 
 if __name__ == "__main__":
 
-    # print(validate_letter("M"))
+    #print(validate_letter("M"))
     #select_play()
     print_yellow("Player 1 Ben")
     sum7 = pyfiglet.figlet_format("Welcome to Sum7", font="bubble")
