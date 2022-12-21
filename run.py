@@ -127,9 +127,9 @@ def select_play():
     else:
         current_player = player2
 
-    print("this are the cips you have available: ", current_player["chips"])
-    selected_chip_input = input(
-        current_player["name"] + " select one of your chips:   ")
+    print("This are the chips you have available: ", current_player["color"] + str(current_player["chips"]) + Style.RESET_ALL)
+    selected_chip_input = input(current_player["color"] +
+        current_player["name"] + Style.RESET_ALL + " select one of your chips:   ")
     selected_chip = int(selected_chip_input)
 
     validate_number(selected_chip,current_player)
@@ -137,7 +137,7 @@ def select_play():
     remove_played_chip(current_player,selected_chip)
 
     selected_column_input = pyip.inputMenu(["A", "B", "C", "D", "E", "F", "G"], prompt =
-        current_player["name"] + " select a column from A to G:   \n")
+        current_player["color"] + current_player["name"] + Style.RESET_ALL + " select a column from A to G:   \n")
     selected_column = str(selected_column_input)
     print(selected_column)
     check_gravity(selected_column, selected_chip)
@@ -191,7 +191,6 @@ def decide_turn():
     """
     Checking which player has a turn
     """
-    print(player1["turn"], "payer turn")
     if player1["turn"] == True:
         player1["turn"] = False
         player2["turn"] = True
@@ -243,14 +242,16 @@ if __name__ == "__main__":
         "name": "",
         "chips": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2,
                   2, 2, 3, 3, 3, 3],
-        "turn": False
+        "turn": False,
+        "color": Fore.YELLOW
     }
 
     player2 = {
         "name": "",
         "chips": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2,
                   2, 2, 2, 3, 3, 3, 3],
-        "turn": False
+        "turn": False,
+        "color":Fore.GREEN
     }
 
     #turn = 1
