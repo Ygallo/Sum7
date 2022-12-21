@@ -1,8 +1,6 @@
 # You can delete these comments, but do not change the name of this file
 # Write your code to expect a terminal of 80 characters wide and 24 rows high
 
-#import pyinputplus as pyip
-
 import pyfiglet
 from colorama import Fore, Back, Style
 import pyinputplus as pyip
@@ -40,11 +38,7 @@ def board_game():
             elif chipOwner[x][y] == "player2":
                 print("", Fore.GREEN + str(board[x][y]) + Style.RESET_ALL, end="   |")
             else:
-                print(" ",  board[x][y], end="   |")
-                #print(" ", end="")
-                #print_yellow(board[x][y])
-                #print(end="   |")
-                
+                print(" ",  board[x][y], end="   |")           
     print("\n   +-----+-----+-----+-----+-----+-----+-----+")
 
 
@@ -133,11 +127,14 @@ def select_play():
     else:
         current_player = player2
 
+    print("this are the cips you have available: ", current_player["chips"])
     selected_chip_input = input(
-        current_player["name"] + " select a chip number from 1 to 3:   ")
+        current_player["name"] + " select one of your chips:   ")
     selected_chip = int(selected_chip_input)
 
-    validate_number(selected_chip)
+    validate_number(selected_chip,current_player)
+    #current_player["chip"]
+    remove_played_chip(current_player,selected_chip)
 
     selected_column_input = pyip.inputMenu(["A", "B", "C", "D", "E", "F", "G"], prompt =
         current_player["name"] + " select a column from A to G:   \n")
@@ -149,37 +146,37 @@ def select_play():
 #select_play()
 
 
-def validate_number(chip):
+def validate_number(chip,current_player):
     """
     Checks for valid number input from the user
     """
+    chips = current_player["chips"]
     try:
         chip = int(chip)
+        result = chips.count(chip)
         if chip > 3:
             raise ValueError(
                 f"You entered {chip}"
             )
-        return True
+        elif chip <= 3 and result == 0:
+            raise ValueError(
+                f"You dont have that {chip}"
+            )
+        elif chip <= 3 and result > 0:    
+            return True
     except ValueError as e:
         print(f"Invalid data: {e}, please try again. \n")
         select_play()
 
 
-#def validate_letter(i):
-   # """
-    #Checking the value of the column selected by the player
-    #"""
-    #try:
-        #letter_choice = ["A", "B", "C", "D", "E", "F", "G"]
-        #i = input("letter row: ")
-        #if i not in letter_choice:
-            #raise ValueError(
-                #f"You can only select A, B, C, D, E, F, G, you entered {i}"
-            #)
-        #print(i)
-    #except ValueError as e:
-        #print(f"Invalid data: {e}, please try again. \n")
-        #return False
+def remove_played_chip(player,selected_chip):
+    
+    chips=player["chips"]
+    for i in chips:
+        if i == selected_chip:
+            chips.remove(i)
+            break
+    
 
 def check_turn():
     """
@@ -222,7 +219,7 @@ if __name__ == "__main__":
 
     #print(validate_letter("M"))
     #select_play()
-    print_yellow("Player 1 Ben")
+    #print_yellow("Player 1 Ben")
     sum7 = pyfiglet.figlet_format("Welcome to Sum7", font="bubble")
     print(sum7)
     print("Rules of the game:")
