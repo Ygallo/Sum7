@@ -87,7 +87,7 @@ def is_space_available(column, row):
         return True
 
 
-def check_gravity(column, chip):
+def check_gravity(column, chip, current_player):
     """
     Check the player chip location on the board. Chips must fall
     as if there was gravity and occupy space available on the board
@@ -109,23 +109,30 @@ def check_gravity(column, chip):
     # check_horizontal_winners(selected_column)
 
     for boardx in board:
-        check_horizontal_winners(boardx)
+        winner = check_horizontal_winners(boardx)
+        if winner:
+            end_game(current_player)
+            break
 
-    column_array=[]
+    column_array = []
     for boardy in board:
-        resulty = convert_column(boardy,selected_column)
+        resulty = convert_column(boardy, selected_column)
         column_array.append(resulty)
 
     column_array_reversed = column_array[::-1]
-    chipOwner_array=[]
+    chipOwner_array = []
     for chipy in chipOwner:
-        result_owner = convert_column(chipy,selected_column)
+        result_owner = convert_column(chipy, selected_column)
         chipOwner_array.append(result_owner)
 
     chipOwner_array_reversed = chipOwner_array[::-1]
 
     for boardy in column_array:
-        check_vertical_winners(column_array_reversed, chipOwner_array_reversed)
+        winner = check_vertical_winners(
+            column_array_reversed, chipOwner_array_reversed)
+        if winner:
+            end_game(current_player)
+            break
 
     decide_turn()
     select_play()
@@ -173,7 +180,7 @@ def select_play():
 
     selected_column = str(selected_column_input)
     # print(selected_column)
-    check_gravity(selected_column, selected_chip)
+    check_gravity(selected_column, selected_chip, current_player)
 
 
 # select_play()
@@ -256,6 +263,10 @@ def string_list_to_int_list(string_list):
 
 
 def check_horizontal_winners(row):
+    """
+    Checks for winner on horizontal row, checks that a min of 3 chips
+    of the same player are in row
+    """
     for minimum_chips_for_win in range(3, 8):
         for index, chip in enumerate(row):
             # print(index, chip)
@@ -275,14 +286,19 @@ def check_horizontal_winners(row):
                 continue
             chip_sum = sum(chips_to_sum)
             if chip_sum == 7:
-                print("Winner found")
+                #print("Winner found")
                 return True
                 # break
-    print("No winner found!")
+    #print("No winner found!")
     return False
 
 
 def check_vertical_winners(column, chipOwner):
+    """
+    Checks for winner on a vertical column, checks that a min of 3 chips
+    of the same player are in row
+    """
+
     for minimum_chips_for_win in range(3, 8):
         for index, chip in enumerate(column):
             # print(index, chip)
@@ -302,74 +318,22 @@ def check_vertical_winners(column, chipOwner):
                 continue
             chip_sum = sum(chips_to_sum)
             if chip_sum == 7:
-                print("Winner found")
+                #print("Winner found")
                 return True
                 # break
-    print("No winner found!")
+    #print("No winner found!")
     return False
 
-# def check_winner(current_player):
 
-    # for x in range(len(board)):
-    # for y in range(len(board[x])):
-    # Check for horizontal sum 7
-    # tile1 = board[x][y]
-    #chip_owner1 = chipOwner[x][y]
-    # print(x, y, "x,y")
-
-    #tile2 = board[x + 1][y]
-    #chip_owner2 = chipOwner[x + 1][y]
-
-    # tile3 = board[x + 2][y]
-    #chip_owner3 = chipOwner[x + 2][y]
-
-    #tile4 = board[x + 3][y]
-    #chip_owner4 = chipOwner[x + 3][y]
-
-    #tile5 = board[x + 4][y]
-    #chip_owner5 = chipOwner[x + 4][y]
-
-    #tile6 = board[x + 5][y]
-    #chip_owner6 = chipOwner[x + 5][y]
-
-    #tile7 = board[x + 6][y]
-    #chip_owner6 = chipOwner[x + 6][y]
-
-    # if chip_owner1 == chip_owner2 == chip_owner3:
-    #print(chip_owner1, "chip owner")
-    # return True
-
-    """
-    for columnIndex in range(BOARD_WIDTH):
-    for rowIndex in range(BOARD_HEIGHT - 3):
-             # Check for vertical four-in-a-row going down:
-           tile1 = board[(columnIndex, rowIndex)]
-           tile2 = board[(columnIndex, rowIndex + 1)]
-            tile3 = board[(columnIndex, rowIndex + 2)]
-             tile4 = board[(columnIndex, rowIndex + 3)]
-             if tile1 == tile2 == tile3 == tile4 == playerTile:
-                 return True
- 
-     for columnIndex in range(BOARD_WIDTH - 3):
-       for rowIndex in range(BOARD_HEIGHT - 3):
-            # Check for four-in-a-row going right-down diagonal:
-             tile1 = board[(columnIndex, rowIndex)]
-             tile2 = board[(columnIndex + 1, rowIndex + 1)]
-tile3 = board[(columnIndex + 2, rowIndex + 2)]
-             tile4 = board[(columnIndex + 3, rowIndex + 3)]
-             if tile1 == tile2 == tile3 == tile4 == playerTile:
-                 return True
- 
-            # Check for four-in-a-row going left-down diagonal:
-             tile1 = board[(columnIndex + 3, rowIndex)]
-            tile2 = board[(columnIndex + 2, rowIndex + 1)]
-           tile3 = board[(columnIndex + 1, rowIndex + 2)]
-             tile4 = board[(columnIndex, rowIndex + 3)]
-             if tile1 == tile2 == tile3 == tile4 == playerTile:
-                 return True
-     return False
-
-    """
+def end_game(current_player):
+    print(pyfiglet.figlet_format("Congratulations ", font="bubble"))
+    print(current_player["color"] + current_player["name"] + Style.RESET_ALL)
+    print(pyfiglet.figlet_format(" You won the game", font="bubble"))
+    play_again = pyip.inputYesNo(prompt="Would you like to play again: ")
+    if play_again == "Yes":
+        print("Yes")
+    else:
+        exit()
 
 
 def print_yellow(text):
@@ -414,6 +378,8 @@ if __name__ == "__main__":
 
     ROWS = 7
     COLS = 7
+
+    won = False
 
     player1 = {
         "name": "",
