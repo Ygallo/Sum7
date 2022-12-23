@@ -5,17 +5,7 @@ import pyfiglet
 from colorama import Fore, Back, Style
 import pyinputplus as pyip
 from itertools import groupby
-
-board = [["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",],
-         ["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",],
-         ["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",],
-         ["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",]]
-
-chipOwner = [["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",],
-             ["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",],
-             ["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",],
-             ["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",]]
-
+import numpy as np
 
 turn = 1
 
@@ -115,14 +105,36 @@ def check_gravity(column, chip):
             chipOwner[y][selected_column] = current_turn
             break
     board_game()
-    #check_winner(current_turn)
-    #check_horizontal_winners(selected_column)
+    # check_winner(current_turn)
+    # check_horizontal_winners(selected_column)
 
     for boardx in board:
-        check_horizontal_winners(boardx, chipOwner)
+        check_horizontal_winners(boardx)
+
+    column_array=[]
+    for boardy in board:
+        resulty = convert_column(boardy,selected_column)
+        column_array.append(resulty)
+
+    column_array_reversed = column_array[::-1]
+    chipOwner_array=[]
+    for chipy in chipOwner:
+        result_owner = convert_column(chipy,selected_column)
+        chipOwner_array.append(result_owner)
+
+    chipOwner_array_reversed = chipOwner_array[::-1]
+
+    for boardy in column_array:
+        check_vertical_winners(column_array_reversed, chipOwner_array_reversed)
 
     decide_turn()
     select_play()
+
+
+def convert_column(column, selected_column):
+    for position, value in enumerate(column):
+        if position == selected_column:
+            return value
 
 
 def select_play():
@@ -225,12 +237,7 @@ def decide_turn():
         player1["turn"] = True
 
 
-
-chip_owners = [
-    "", "", "player1", "player1", "player1", "", ""
-]
-
-# minimum_chips_for_win = 3
+minimum_chips_for_win = 3
 
 
 def all_equal(iterable):
@@ -248,7 +255,7 @@ def string_list_to_int_list(string_list):
     return int_list
 
 
-def check_horizontal_winners(row, chipOwner):
+def check_horizontal_winners(row):
     for minimum_chips_for_win in range(3, 8):
         for index, chip in enumerate(row):
             # print(index, chip)
@@ -275,36 +282,62 @@ def check_horizontal_winners(row, chipOwner):
     return False
 
 
-#def check_winner(current_player):
+def check_vertical_winners(column, chipOwner):
+    for minimum_chips_for_win in range(3, 8):
+        for index, chip in enumerate(column):
+            # print(index, chip)
+            if chip == "":
+                continue
+            chips_to_sum = []
+            chips_to_sum_owners = []
+            for chip_index in range(minimum_chips_for_win):
+                if index + chip_index > 6:
+                    break
+                chips_to_sum.append(column[index + chip_index])
+                chips_to_sum_owners.append(chipOwner[index + chip_index])
+            if not all_equal(chips_to_sum_owners):
+                continue
+            chips_to_sum = string_list_to_int_list(chips_to_sum)
+            if None in chips_to_sum:
+                continue
+            chip_sum = sum(chips_to_sum)
+            if chip_sum == 7:
+                print("Winner found")
+                return True
+                # break
+    print("No winner found!")
+    return False
 
-    #for x in range(len(board)):
-        #for y in range(len(board[x])):
-            # Check for horizontal sum 7
-           # tile1 = board[x][y]
-            #chip_owner1 = chipOwner[x][y]
-           # print(x, y, "x,y")
+# def check_winner(current_player):
 
-            #tile2 = board[x + 1][y]
-            #chip_owner2 = chipOwner[x + 1][y]
+    # for x in range(len(board)):
+    # for y in range(len(board[x])):
+    # Check for horizontal sum 7
+    # tile1 = board[x][y]
+    #chip_owner1 = chipOwner[x][y]
+    # print(x, y, "x,y")
 
-           # tile3 = board[x + 2][y]
-            #chip_owner3 = chipOwner[x + 2][y]
+    #tile2 = board[x + 1][y]
+    #chip_owner2 = chipOwner[x + 1][y]
 
-            #tile4 = board[x + 3][y]
-            #chip_owner4 = chipOwner[x + 3][y]
+    # tile3 = board[x + 2][y]
+    #chip_owner3 = chipOwner[x + 2][y]
 
-            #tile5 = board[x + 4][y]
-            #chip_owner5 = chipOwner[x + 4][y]
+    #tile4 = board[x + 3][y]
+    #chip_owner4 = chipOwner[x + 3][y]
 
-            #tile6 = board[x + 5][y]
-            #chip_owner6 = chipOwner[x + 5][y]
+    #tile5 = board[x + 4][y]
+    #chip_owner5 = chipOwner[x + 4][y]
 
-            #tile7 = board[x + 6][y]
-            #chip_owner6 = chipOwner[x + 6][y]
+    #tile6 = board[x + 5][y]
+    #chip_owner6 = chipOwner[x + 5][y]
 
-            #if chip_owner1 == chip_owner2 == chip_owner3:
-                #print(chip_owner1, "chip owner")
-                # return True
+    #tile7 = board[x + 6][y]
+    #chip_owner6 = chipOwner[x + 6][y]
+
+    # if chip_owner1 == chip_owner2 == chip_owner3:
+    #print(chip_owner1, "chip owner")
+    # return True
 
     """
     for columnIndex in range(BOARD_WIDTH):
@@ -372,7 +405,13 @@ if __name__ == "__main__":
     board = [["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",],
              ["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",],
              ["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",],
-             ["", "", "", "", "", "", "",],]
+             ["", "", "", "", "", "", "",]]
+
+    chipOwner = [["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",],
+                 ["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",],
+                 ["", "", "", "", "", "", "",], ["", "", "", "", "", "", "",],
+                 ["", "", "", "", "", "", "",]]
+
     ROWS = 7
     COLS = 7
 
