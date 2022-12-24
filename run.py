@@ -1,13 +1,10 @@
 # You can delete these comments, but do not change the name of this file
 # Write your code to expect a terminal of 80 characters wide and 24 rows high
-
+from itertools import groupby
+import os
 import pyfiglet
 from colorama import Fore, Back, Style
 import pyinputplus as pyip
-from itertools import groupby
-import numpy as np
-
-#turn = 2
 
 
 def board_game():
@@ -20,10 +17,10 @@ def board_game():
         print("\n   +-----+-----+-----+-----+-----+-----+-----+")
         print(x, " |", end="")
         for y in range(COLS):
-            if chipOwner[x][y] == "player1":
+            if chip_owner[x][y] == "player1":
                 print("", Fore.YELLOW +
                       str(board[x][y]) + Style.RESET_ALL, end="   |")
-            elif chipOwner[x][y] == "player2":
+            elif chip_owner[x][y] == "player2":
                 print("", Fore.GREEN +
                       str(board[x][y]) + Style.RESET_ALL, end="   |")
             else:
@@ -49,7 +46,6 @@ def coordinate_parser(input_string):
     Checking the value of the column selected by the player
     to get the coordinate space to locate the chip on the board
     """
-    print("input_string" + input_string)
     coordinate = 0
     if input_string == "A":
         coordinate = 0
@@ -67,7 +63,6 @@ def coordinate_parser(input_string):
         coordinate = 6
     else:
         print("Invalid")
-    print(coordinate)
     return coordinate
 
 
@@ -75,8 +70,6 @@ def is_space_available(column, row):
     """
     Checkin if there is space available on the board
     """
-    print("checkin if column ", column, " row ", row, " is available")
-    print("current value of the position", board[column][row])
     if board[column][row] == 1:
         return False
     elif board[column][row] == 2:
@@ -90,26 +83,30 @@ def is_space_available(column, row):
 def check_gravity(column, chip, current_player):
     """
     Check the player chip location on the board. Chips must fall
-    as if there was gravity and occupy space available on the board
+    as if there was gravity and occupy space available on the board. 
+    Print the board with the new played chip and check if there are any
+    vertical or horizontal sum7. If no winner, will continue with the 
+    next turn.
     """
     selected_column = coordinate_parser(column)
-    #print("selected_column", selected_column)
     current_turn = check_turn()
 
-    for y in range(6, 0, -1):
-        #print("selected columns is: ", selected_column,  " y is: ", y)
+    for y in range(6, -1, -1):
         available = is_space_available(y, selected_column)
-        #print(available, "available")
+
         if available:
             board[y][selected_column] = chip
-            chipOwner[y][selected_column] = current_turn
+            remove_played_chip(current_player, chip)
+            chip_owner[y][selected_column] = current_turn
             break
+        elif not available and y == 0:
+            print("That space is taken, choose another column")
+            select_play()
+
     board_game()
-    # check_winner(current_turn)
-    # check_horizontal_winners(selected_column)
 
     for boardx in board:
-        winner = check_horizontal(board[y], chipOwner[y])
+        winner = check_horizontal(board[y], chip_owner[y])
         if winner:
             end_game(current_player)
             break
@@ -120,16 +117,16 @@ def check_gravity(column, chip, current_player):
         column_array.append(resulty)
 
     column_array_reversed = column_array[::-1]
-    chipOwner_array = []
-    for chipy in chipOwner:
+    chip_owner_array = []
+    for chipy in chip_owner:
         result_owner = convert_column(chipy, selected_column)
-        chipOwner_array.append(result_owner)
+        chip_owner_array.append(result_owner)
 
-    chipOwner_array_reversed = chipOwner_array[::-1]
+    chip_owner_array_reversed = chip_owner_array[::-1]
 
     for boardy in column_array:
         winner = check_vertical_winners(
-            column_array_reversed, chipOwner_array_reversed)
+            column_array_reversed, chip_owner_array_reversed)
         if winner:
             end_game(current_player)
             break
@@ -164,22 +161,21 @@ def select_play():
           Style.RESET_ALL)
 
     selected_chip_input = pyip.inputNum(current_player["color"] +
-                                        current_player["name"].upper() + Style.RESET_ALL +
+                                        current_player["name"].upper() +
+                                        Style.RESET_ALL +
                                         " select one of your chips:   ")
 
     selected_chip = int(selected_chip_input)
 
     validate_number(selected_chip, current_player)
-    # current_player["chip"]
-    remove_played_chip(current_player, selected_chip)
 
     selected_column_input = pyip.inputMenu(["A", "B", "C", "D", "E", "F", "G"],
                                            prompt=current_player["color"] +
-                                           current_player["name"].upper() + Style.RESET_ALL +
-                                           " select a column from A to G:   \n")
+                                           current_player["name"].upper()
+                                           + Style.RESET_ALL +
+                                           " select a column from A to G:  \n")
 
     selected_column = str(selected_column_input)
-    # print(selected_column)
     check_gravity(selected_column, selected_chip, current_player)
 
 
@@ -244,10 +240,11 @@ def decide_turn():
         player1["turn"] = True
 
 
-minimum_chips_for_win = 3
-
-
 def all_equal(iterable):
+    """
+    Checks if it is the same owner of the chip
+    to sum them up
+    """
     g = groupby(iterable)
     return next(g, True) and not next(g, False)
 
@@ -273,7 +270,6 @@ def check_horizontal(row, owners_row):
     """
     for minimum_chips_for_win in range(3, 8):
         for index, chip in enumerate(row):
-            # print(index, chip)
             if chip == "":
                 continue
             chips_to_sum = []
@@ -291,46 +287,12 @@ def check_horizontal(row, owners_row):
                 continue
             chip_sum = sum(chips_to_sum)
             if chip_sum == 7:
-                #print("Winner found")
                 return True
-                # break
-    #print("No winner found!")
+
     return False
 
 
-def check_horizontal_winners(row):
-    """
-    Checks for winner on horizontal row, checks that a min of 3 chips
-    of the same player are in row
-    """
-    for minimum_chips_for_win in range(3, 8):
-        for index, chip in enumerate(row):
-            # print(index, chip)
-            if chip == "":
-                continue
-            chips_to_sum = []
-            chips_to_sum_owners = []
-            for chip_index in range(minimum_chips_for_win):
-                if index + chip_index > 6:
-                    break
-                chips_to_sum.append(row[index + chip_index])
-                chips_to_sum_owners.append(chipOwner[index + chip_index])
-            if not all_equal(chips_to_sum_owners):
-                del chips_to_sum
-                continue
-            chips_to_sum = string_list_to_int_list(chips_to_sum)
-            if None in chips_to_sum:
-                continue
-            chip_sum = sum(chips_to_sum)
-            if chip_sum == 7:
-                #print("Winner found")
-                return True
-                # break
-    #print("No winner found!")
-    return False
-
-
-def check_vertical_winners(column, chipOwner):
+def check_vertical_winners(column, chip_owner):
     """
     Checks for winner on a vertical column, checks that a min of 3 chips
     of the same player are in a column to win
@@ -338,7 +300,7 @@ def check_vertical_winners(column, chipOwner):
 
     for minimum_chips_for_win in range(3, 8):
         for index, chip in enumerate(column):
-            # print(index, chip)
+
             if chip == "":
                 continue
             chips_to_sum = []
@@ -347,7 +309,7 @@ def check_vertical_winners(column, chipOwner):
                 if index + chip_index > 6:
                     break
                 chips_to_sum.append(column[index + chip_index])
-                chips_to_sum_owners.append(chipOwner[index + chip_index])
+                chips_to_sum_owners.append(chip_owner[index + chip_index])
             if not all_equal(chips_to_sum_owners):
                 continue
             chips_to_sum = string_list_to_int_list(chips_to_sum)
@@ -355,25 +317,57 @@ def check_vertical_winners(column, chipOwner):
                 continue
             chip_sum = sum(chips_to_sum)
             if chip_sum == 7:
-                #print("Winner found")
                 return True
-                # break
-    #print("No winner found!")
     return False
 
 
+def reset_game():
+    """
+    If game is over, resets the game to new, clearing the board,
+    setting all the available chips to play again.
+    """
+
+    for i in range(ROWS):
+        for j in range(COLS):
+            board[i][j] = ""
+            chip_owner[i][j] = ""
+
+    player1["name"] = ""
+    player1["chips"] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                        1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3]
+    player2["turn"] = True
+
+    player2["name"] = ""
+    player2["chips"] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                        1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3]
+    player2["turn"] = False
+
+    os.system('clear')
+    board_game()
+    ask_name()
+    select_play()
+
+
 def end_game(current_player):
+    """
+    Once a winner is found, congratulate the player and
+    ask if the wish to play again. If yes, reset the game,
+    if no end game, and thanks for playing.
+    """
     print(pyfiglet.figlet_format("Congratulations ", font="bubble"))
-    print(current_player["color"] + current_player["name"].upper() + Style.RESET_ALL)
+    print(current_player["color"] +
+          current_player["name"].upper() + Style.RESET_ALL)
     print(pyfiglet.figlet_format(" You won the game", font="bubble"))
-    play_again = pyip.inputYesNo(prompt="Would you like to play again: ")
-    
+    play_again = pyip.inputMenu(
+        ["Yes", "No"], prompt="Would you like to play again: ")
+
     if play_again == "Yes":
-        #print("Yes")
-        board_game()
-        ask_name()
-        select_play()
+        reset_game()
+
     else:
+        os.system('clear')
+        print(pyfiglet.figlet_format("Thank you for playing", font="bubble"))
+        print()
         exit()
 
 
@@ -393,8 +387,6 @@ def print_green(text):
 
 if __name__ == "__main__":
 
-    # select_play()
-    #print_yellow("Player 1 Ben")
     sum7 = pyfiglet.figlet_format("Welcome to Sum7", font="bubble")
     print(sum7)
     print("Rules of the game:")
@@ -415,34 +407,18 @@ if __name__ == "__main__":
              ["", "", "", "", "", "", "",],
              ["", "", "", "", "", "", "",]]
 
-    '''board = [["", "", "", "", "", "", "",],
-    ["", "", "", "", "", "", "",],
-    ["", "", "", "", "", "", "",], 
-    ["", "", "", "", "", "", "",],
-    [2, "", "", "", "", "", "",], 
-    [3, "", "", "", "", "", "",],
-    [3, 2, 1, 3, 2, "", "",]]'''
-
-    '''chipOwner = [["", "", "", "", "", "", "",],
-    ["", "", "", "", "", "", "",],
-    ["", "", "", "", "", "", "",], 
-    ["", "", "", "", "", "", "",],
-    ["player1", "", "", "", "", "", "",], 
-    ["player1", "", "", "", "", "", "",],
-    ["player1", "player2", "player2", "player2", "player1", "", "",]]'''
-
-    chipOwner = [["", "", "", "", "", "", "",],
-                 ["", "", "", "", "", "", "",],
-                 ["", "", "", "", "", "", "",],
-                 ["", "", "", "", "", "", "",],
-                 ["", "", "", "", "", "", "",],
-                 ["", "", "", "", "", "", "",],
-                 ["", "", "", "", "", "", "",]]
+    chip_owner = [["", "", "", "", "", "", "",],
+                  ["", "", "", "", "", "", "",],
+                  ["", "", "", "", "", "", "",],
+                  ["", "", "", "", "", "", "",],
+                  ["", "", "", "", "", "", "",],
+                  ["", "", "", "", "", "", "",],
+                  ["", "", "", "", "", "", "",]]
 
     ROWS = 7
     COLS = 7
 
-    won = False
+    minimum_chips_for_win = 3
 
     player1 = {
         "name": "",
@@ -460,10 +436,6 @@ if __name__ == "__main__":
         "color": Fore.GREEN
     }
 
-    turn = 2
-
-
     board_game()
     ask_name()
     select_play()
-   # decide_turn()
