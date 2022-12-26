@@ -116,12 +116,12 @@ def check_gravity(column, chip, current_player):
         resulty = convert_column(boardy, selected_column)
         column_array.append(resulty)
 
-    column_array_reversed = column_array[::-1]
     chip_owner_array = []
     for chipy in chip_owner:
         result_owner = convert_column(chipy, selected_column)
         chip_owner_array.append(result_owner)
 
+    column_array_reversed = column_array[::-1]
     chip_owner_array_reversed = chip_owner_array[::-1]
 
     for boardy in column_array:
