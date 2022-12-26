@@ -9,8 +9,8 @@ import pyinputplus as pyip
 
 def board_game():
     """
-    Creates the board game with letter and number values for the player
-    to choose the input its chip on its turn
+    Creates the board game with letter and number values for the players
+    to choose the where to locate its chip on each turn
     """
     print("\n      A     B     C     D     E     F     G  ", end="")
     for x in range(ROWS):
@@ -30,8 +30,8 @@ def board_game():
 
 def ask_name():
     """
-    Ask player name to add value to the dictionary
-    and welcome player to the game
+    Ask players name, assigns a color to each player
+    and welcome players to the game
     """
     player1["name"] = pyip.inputStr("Please enter your name player 1: \n")
     print("Welcome " + Fore.YELLOW + player1["name"].upper() + Style.RESET_ALL)
@@ -136,6 +136,10 @@ def check_gravity(column, chip, current_player):
 
 
 def convert_column(column, selected_column):
+    """
+    Converts the columns of the matrix in an array, 
+    for evaluation of sums later.
+    """
     for position, value in enumerate(column):
         if position == selected_column:
             return value
@@ -163,7 +167,7 @@ def select_play():
     selected_chip_input = pyip.inputNum(current_player["color"] +
                                         current_player["name"].upper() +
                                         Style.RESET_ALL +
-                                        " select one of your chips:   ")
+                                        " select one of your chips:   \n")
 
     selected_chip = int(selected_chip_input)
 
@@ -177,9 +181,6 @@ def select_play():
 
     selected_column = str(selected_column_input)
     check_gravity(selected_column, selected_chip, current_player)
-
-
-# select_play()
 
 
 def validate_number(chip, current_player):
@@ -207,7 +208,7 @@ def validate_number(chip, current_player):
 
 def remove_played_chip(player, selected_chip):
     """
-    Removes the played chip form the dictionary.
+    Removes the played chip from available chips of each player.
     Used chip cannot be used again.
     """
 
