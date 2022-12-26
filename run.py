@@ -83,9 +83,9 @@ def is_space_available(column, row):
 def check_gravity(column, chip, current_player):
     """
     Check the player chip location on the board. Chips must fall
-    as if there was gravity and occupy space available on the board. 
+    as if there was gravity and occupy space available on the board.
     Print the board with the new played chip and check if there are any
-    vertical or horizontal sum7. If no winner, will continue with the 
+    vertical or horizontal sum7. If no winner, will continue with the
     next turn.
     """
     selected_column = coordinate_parser(column)
@@ -137,7 +137,7 @@ def check_gravity(column, chip, current_player):
 
 def convert_column(column, selected_column):
     """
-    Converts the columns of the matrix in an array, 
+    Converts the columns of the matrix in an array,
     for evaluation of sums later.
     """
     for position, value in enumerate(column):
@@ -400,21 +400,21 @@ if __name__ == "__main__":
     print("-------------------------------------------------------------")
 
     letter_choice = ["A", "B", "C", "D", "E", "F", "G"]
-    board = [["", "", "", "", "", "", "",],
-             ["", "", "", "", "", "", "",],
-             ["", "", "", "", "", "", "",],
-             ["", "", "", "", "", "", "",],
-             ["", "", "", "", "", "", "",],
-             ["", "", "", "", "", "", "",],
-             ["", "", "", "", "", "", "",]]
+    board = [["", "", "", "", "", "", ""],
+             ["", "", "", "", "", "", ""],
+             ["", "", "", "", "", "", ""],
+             ["", "", "", "", "", "", ""],
+             ["", "", "", "", "", "", ""],
+             ["", "", "", "", "", "", ""],
+             ["", "", "", "", "", "", ""]]
 
-    chip_owner = [["", "", "", "", "", "", "",],
-                  ["", "", "", "", "", "", "",],
-                  ["", "", "", "", "", "", "",],
-                  ["", "", "", "", "", "", "",],
-                  ["", "", "", "", "", "", "",],
-                  ["", "", "", "", "", "", "",],
-                  ["", "", "", "", "", "", "",]]
+    chip_owner = [["", "", "", "", "", "", ""],
+                  ["", "", "", "", "", "", ""],
+                  ["", "", "", "", "", "", ""],
+                  ["", "", "", "", "", "", ""],
+                  ["", "", "", "", "", "", ""],
+                  ["", "", "", "", "", "", ""],
+                  ["", "", "", "", "", "", ""]]
 
     ROWS = 7
     COLS = 7
