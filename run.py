@@ -360,7 +360,7 @@ def end_game(current_player):
           current_player["name"].upper() + Style.RESET_ALL)
     print(pyfiglet.figlet_format(" You won the game", font="bubble"))
     play_again = pyip.inputMenu(
-        ["Yes", "No"], prompt="Would you like to play again: ")
+        ["Yes", "No"], prompt="Would you like to play again: \n")
 
     if play_again == "Yes":
         reset_game()
@@ -392,11 +392,11 @@ if __name__ == "__main__":
     print(sum7)
     print("Rules of the game:")
     print("-------------------------------------------------------------")
-    print("Players must add the same colored numbers in a row to win.")
+    print("Players must add the same colored numbers in a row/column to win.")
     print("Players share one board.")
     print("Numbers go from 1 to 3.")
     print("Only one number is played at a time.")
-    print("The game ends when a player sums 7 of the same color-in-a-row")
+    print("The game ends when a player sums 7")
     print("-------------------------------------------------------------")
 
     letter_choice = ["A", "B", "C", "D", "E", "F", "G"]

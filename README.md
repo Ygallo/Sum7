@@ -1,31 +1,30 @@
-![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+# Sum 7
 
-Welcome Ygallo,
+Sum 7, is a Python terminal game that runs on Heroku.
 
-This is the Code Institute student template for deploying your third portfolio project, the Python command-line project. The last update to this file was: **August 17, 2021**
+This game is inspired by a board game my kids have at home, in spanish called Suma7.This is a 2 player game that has a board similar to the connect4 game, with the difference that instead of 2 players with different color chips, the players on Sum7, have numbered chips and need to sum 7 to win. 
 
-## Reminders
+## **How to play**
 
-* Your code must be placed in the `run.py` file
-* Your dependencies must be placed in the `requirements.txt` file
-* Do not edit any of the other files or your code may not deploy properly
+- Players must add the same colored numbers in a row or column to win. 
+- Players share one board, and the game behaves as if there is gravity on the board. 
+- Players must select a Numbers from 1 to 3. Each player will have 26 chips composed of : 11(eleven) ones,  11(eleven) tows and 4 (four) threes.
+- Players also need to select a column to place the selected chip, columns go from A to G. 
+Players take turns to place their chips on the board.
+- The game ends when a player sums 7 of the same color in a row or column.
 
-## Creating the Heroku app
+## **Features**
 
-When you create the app, you will need to add two buildpacks from the _Settings_ tab. The ordering is as follows:
+### **Existing Features**
 
-1. `heroku/python`
-2. `heroku/nodejs`
+#### **Title Section and rules:**
 
-You must then create a _Config Var_ called `PORT`. Set this to `8000`
+- The title of the game is displayed using the Pyfiglet library. 
+- The the rules of the game appear below the title for the user to become familiar on how to start playing the game.
+![Welcome](assets/images/welcome-sum7.jpg)
 
-If you have credentials, such as in the Love Sandwiches project, you must create another _Config Var_ called `CREDS` and paste the JSON into the value field.
+- Then the blank game board is displayed.
 
-Connect your GitHub repository and deploy as normal.
+![Blank board](assets/images/blank-board.jpg)
 
-## Constraints
 
-The deployment terminal is set to 80 columns by 24 rows. That means that each line of text needs to be 80 characters or less otherwise it will be wrapped onto a second line.
-
------
-Happy coding!
