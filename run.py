@@ -6,6 +6,8 @@ import pyfiglet
 from colorama import Fore, Back, Style
 import pyinputplus as pyip
 
+# code taken from connect4 tutorial
+
 
 def board_game():
     """
@@ -39,6 +41,8 @@ def ask_name():
     player2["name"] = pyip.inputStr("Please enter your name player 2: \n")
     print("Welcome " + Fore.GREEN + player2["name"].upper() + Style.RESET_ALL)
     print("---------------------------------------------------\n")
+
+# code taken from connect4 tutorial
 
 
 def coordinate_parser(input_string):
@@ -357,7 +361,7 @@ def end_game(current_player):
     """
     print(pyfiglet.figlet_format("Congratulations ", font="bubble"))
     print(current_player["color"] +
-          current_player["name"].upper() + Style.RESET_ALL)
+          current_player["name"].center(40) + Style.RESET_ALL)
     print(pyfiglet.figlet_format(" You won the game", font="bubble"))
     play_again = pyip.inputMenu(
         ["Yes", "No"], prompt="Would you like to play again: \n")
