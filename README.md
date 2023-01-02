@@ -83,6 +83,9 @@ Players take turns to place their chips on the board.
 
 - Once a player is found to have added to 7, the game ends and the winner is congratulated. 
 - The winner is then ask if they will like to play the game again. 
+
+![Winner](assets/images/winner.jpg)
+
 - If YES, the screens clears, board and chips are reset and the game starts again, players are asked to enter their names.
 - If they answer NO, the game ends. Player is thanked for playing.
 
