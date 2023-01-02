@@ -43,6 +43,8 @@ def ask_name():
     print("---------------------------------------------------\n")
 
 # code taken from connect4 tutorial
+
+
 def coordinate_parser(input_string):
     """
     Checking the value of the column selected by the player
@@ -90,10 +92,10 @@ def check_gravity(column, chip, current_player):
     vertical or horizontal sum7. If no winner, will continue with the
     next turn.
     """
-    
+
     selected_column = coordinate_parser(column)
     current_turn = check_turn()
-        
+
     for y in range(6, -1, -1):
         available = is_space_available(y, selected_column)
 
@@ -185,7 +187,6 @@ def select_play():
 
     selected_column = str(selected_column_input)
     check_gravity(selected_column, selected_chip, current_player)
-    
 
 
 def validate_number(chip, current_player):
@@ -226,27 +227,28 @@ def remove_played_chip(player, selected_chip):
 
 def board_full():
     """
-    If there are no winners and the board is full, 
+    If there are no winners and the board is full,
     reset the game.
     """
     counter = 0
-          
+
     for i in range(ROWS):
         for j in range(COLS):
             if board[i][j] != "":
                 counter += 1
-    
+
     if counter == 49:
         print(pyfiglet.figlet_format("Sorry, no winners", font="bubble"))
         play_again = pyip.inputMenu(
-        ["Yes", "No"], prompt="Would you like to play again: \n")
+            ["Yes", "No"], prompt="Would you like to play again: \n")
 
         if play_again == "Yes":
             reset_game()
 
         else:
             os.system('clear')
-            print(pyfiglet.figlet_format("Thank you for playing", font="bubble"))
+            print(pyfiglet.figlet_format("Thank you for playing",
+                                         font="bubble"))
             exit()
 
 
