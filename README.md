@@ -88,6 +88,13 @@ Players take turns to place their chips on the board.
 
 ![End game](assets/images/thanks-for-playing.jpg)
 
+- If the board is full, and no winner is found, the game ends.
+- Player is ask if they  will like to play the game again. 
+- If YES, the screens clears, board and chips are reset and the game starts again, players are asked to enter their names.
+- If they answer NO, the game ends. Player is thanked for playing.
+
+![Board Full, no winners](assets/images/board-full-no-win.jpg)
+
 ## **Future Features**
 
 - Sum the chips on the diagonal line left and right.
